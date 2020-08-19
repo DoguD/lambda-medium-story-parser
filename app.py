@@ -1,4 +1,6 @@
 from chalice import Chalice
+import json
+import requests
 
 app = Chalice(app_name='lambda-medium-story-parser')
 
@@ -6,6 +8,20 @@ app = Chalice(app_name='lambda-medium-story-parser')
 @app.route('/')
 def index():
     return {'hello': 'world'}
+
+
+@app.route('/get_stories', methods=['GET'], cors=True)
+def get_stories():
+    # Get query parameters
+    request = app.current_request
+    query_params = request.query_params
+    profile = query_params['profile']
+
+    # Send the request to medium
+    target_url ='https://medium.com/@'+profile+'?format=json'
+    r = requests.get(url=target_url)
+
+    return {'status': r.status_code}
 
 
 # The view function above will return {"hello": "world"}
