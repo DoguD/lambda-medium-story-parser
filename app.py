@@ -10,18 +10,25 @@ def index():
     return {'hello': 'world'}
 
 
-@app.route('/get_stories', methods=['GET'], cors=True)
-def get_stories():
+@app.route('/get_stories_by_username', methods=['GET'], cors=True)
+def get_stories_by_username():
     # Get query parameters
     request = app.current_request
     query_params = request.query_params
-    profile = query_params['profile']
+    user_name = query_params['user_name']
 
     # Send the request to medium
-    target_url ='https://medium.com/@'+profile+'?format=json'
+    target_url ='https://medium.com/@'+user_name+'?format=json'
     r = requests.get(url=target_url)
 
-    return {'status': r.status_code}
+    # Parse data
+    data = ''
+    content = r.iter_lines()
+    for element in content:
+        data += str(element)
+    data = data.replace('])}while(1);</x>', '')
+
+    return json.dumps({'status': r.status_code, 'data': data})
 
 
 # The view function above will return {"hello": "world"}
