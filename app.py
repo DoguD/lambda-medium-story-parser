@@ -28,4 +28,7 @@ def get_stories_by_username():
         data += str(element)
     data = json.loads(data.replace('])}while(1);</x>', '')[2:-1].replace('\\', ''))
 
-    return data
+    # Get stories
+    stories = data['payload']['references']['Post']
+
+    return {'status': r.status_code, 'stories': stories}
