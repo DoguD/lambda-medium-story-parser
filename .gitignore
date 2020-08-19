@@ -1,2 +1,6 @@
 .chalice/deployments/
 .chalice/venv/
+.idea/
+.chalice/
+
+*.pyc
